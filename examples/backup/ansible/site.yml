@@ -1,0 +1,14 @@
+# Rebuild playbook skeleton. Run locally on a fresh box (boot -> mount USB ->
+# run this). Roles are ordered: harden the base, stand up the platform, then
+# restore data. Add/spilt roles to match your stack.
+- hosts: localhost
+  connection: local
+  become: true
+  roles:
+    - base-hardening      # SSH, sysctl, firewall, fail2ban, auditd, IDS
+    - docker-platform     # Docker + tiered compose + reverse proxy
+    - dns                 # Unbound + DoH
+    - vpn                 # OpenVPN server + PKI restore
+    - git-forge           # self-hosted Git restore (tarball -> version -> restore)
+    - scheduled-jobs      # timers: CTI feed, backups, audits
+    - restore-data        # pull data back from the collected backups

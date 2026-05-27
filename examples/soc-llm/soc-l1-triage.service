@@ -1,0 +1,8 @@
+[Unit]
+Description=SOC first-line alert triage (local LLM)
+After=network-online.target ollama.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/soc-l1-triage

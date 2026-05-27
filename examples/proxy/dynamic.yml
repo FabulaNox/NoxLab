@@ -1,0 +1,24 @@
+# Traefik dynamic config (template). Defines middlewares + a sample router for
+# a service that should only be reachable from the LAN and VPN.
+http:
+  middlewares:
+    lan-vpn-only:
+      ipAllowList:
+        sourceRange:
+          - "192.0.2.0/24"        # management LAN (example)
+          - "198.51.100.0/24"     # VPN clients (example)
+
+  routers:
+    # Sensitive service: wildcard TLS + restricted to LAN/VPN.
+    internal-app:
+      rule: "Host(`internal.example.com`)"
+      entryPoints: [websecure]
+      tls: { certResolver: le }
+      service: internal-app
+      middlewares: [lan-vpn-only]
+
+  services:
+    internal-app:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:8080"

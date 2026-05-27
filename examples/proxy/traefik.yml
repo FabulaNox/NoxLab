@@ -1,0 +1,29 @@
+# Traefik static config (template). Wildcard TLS via ACME DNS-01 so you never
+# expose port 80 for HTTP-01. Adapt the domain, email, and DNS provider.
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint: { to: websecure, scheme: https }
+  websecure:
+    address: ":443"
+
+providers:
+  docker:
+    exposedByDefault: false
+  file:
+    filename: /etc/traefik/dynamic.yml
+    watch: true
+
+certificatesResolvers:
+  le:
+    acme:
+      email: you@example.com
+      storage: /etc/traefik/acme/acme.json
+      dnsChallenge:
+        provider: your-dns-provider     # e.g. cloudflare, etc.
+
+log:
+  level: INFO
+accessLog: {}

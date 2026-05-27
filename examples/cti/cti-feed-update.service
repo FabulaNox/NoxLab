@@ -1,0 +1,8 @@
+[Unit]
+Description=CTI feed update - pull abuse.ch IOCs into Wazuh CDB lists
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/update-cti-feeds.sh

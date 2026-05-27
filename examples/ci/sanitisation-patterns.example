@@ -1,0 +1,10 @@
+# .sanitisation-patterns - extended-regex, one forbidden identifier per line.
+# Blank lines and # comments are ignored. The gate fails the build if any of
+# these appears in a tracked file. Adapt to YOUR invariants.
+#
+# Examples (replace with your own):
+yourdomain\.example
+\bYourHostnameA\b
+\bYourHostnameB\b
+10\.0\.0\.[0-9]+
+\byour-username\b

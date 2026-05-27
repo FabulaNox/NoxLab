@@ -1,0 +1,17 @@
+# Tier 1 - a stateful/app service on its OWN isolated bridge, fronted by the
+# tier-0 proxy via labels. Repeat per app; keep tiers on separate networks so
+# they cannot reach each other laterally.
+services:
+  site:
+    image: nginx:alpine          # example: a static site
+    container_name: site
+    restart: unless-stopped
+    networks: [app_net]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.site.rule=Host(`site.example.com`)"
+      - "traefik.http.routers.site.entrypoints=websecure"
+      - "traefik.http.routers.site.tls.certresolver=le"
+networks:
+  app_net:
+    driver: bridge

@@ -1,0 +1,13 @@
+# Tier 0 - ingress. The reverse proxy comes up first; everything else sits
+# behind it. Adapt the cert/email/domain to your setup (see ../proxy/).
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: unless-stopped
+    network_mode: host          # single ingress; binds the host's 80/443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./dynamic.yml:/etc/traefik/dynamic.yml:ro
+      - ./acme:/etc/traefik/acme   # ACME cert storage (chmod 600)
